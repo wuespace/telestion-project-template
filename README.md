@@ -7,8 +7,10 @@ Dependencies to the [main repo](https://github.com/wuespace/telestion) are inclu
 ## Necessary Changes
 
 - [ ] `settings.gradle` - set `rootProject.name`
-- [ ] `Dockerfile` - replace `TelestionTemplate` in the CMD block by the new project name 
+- [ ] `Dockerfile` - replace `TelestionTemplate` in the CMD block by the new project's name (they must match exactly!)
 - [ ] `build.gradle` - replace `group` by your group name
+  (it is recommended to follow [Maven Central `groupId` naming conventions](https://maven.apache.org/guides/mini/guide-naming-conventions.html),
+  i.e., beginning with the company url in reverse)
 - [ ] `conf/config.json` - adapt to fit your needs
 - [ ] `src/main/java` - add your source code
 - [ ] install the Telestion Client PSC (see `gui/README.md` for further information)
