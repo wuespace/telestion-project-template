@@ -5,7 +5,7 @@ ENV WORK_DIR /usr/telestion
 EXPOSE 8080
 
 COPY conf/config.json $WORK_DIR/config.json
-COPY build/distributions/RocketSound-*.tar $WORK_DIR/
+COPY build/distributions/TelestionTemplate-*.tar $WORK_DIR/
 
 WORKDIR $WORK_DIR
 ENTRYPOINT ["sh", "-c"]
