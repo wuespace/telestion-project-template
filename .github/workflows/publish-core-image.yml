@@ -1,12 +1,16 @@
 name: Publish Docker Image
 
 # Events that trigger this workflow
-on: [workflow_dispatch]
+on:
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
 
 jobs:
   push-to-registry:
     name: Build and push Docker image to GitHub Container Registry
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     defaults:
       run:
         working-directory: ./core
@@ -21,6 +25,15 @@ jobs:
           java-package: jdk
       - name: Set up Docker Buildx ⬆
         uses: docker/setup-buildx-action@v1.1.2
+
+      - name: Restore cache release upload URL ♻️
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.build-env
+          key: 'github-release-action'
+
+      - name: Import environment
+        run: cat ~/.build-env >> $GITHUB_ENV
 
       - name: Restore gradle cache ♻️
         uses: actions/cache@v2.1.5
@@ -43,22 +56,6 @@ jobs:
         run: chmod +x gradlew && ./gradlew assembleDist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v3
-        with:
-          github-token: ${{ secrets.github_token }}
-          release-count: '0'
-      - name: Create Release
-        uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
-        with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
 
       # You may need to manage write and read access of GitHub Actions
       # for this repository in the container settings.
