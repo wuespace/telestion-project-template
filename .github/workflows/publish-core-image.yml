@@ -24,7 +24,7 @@ jobs:
           java-version: '16'
           java-package: jdk
       - name: Set up Docker Buildx ⬆
-        uses: docker/setup-buildx-action@v1.1.2
+        uses: docker/setup-buildx-action@v1.2.0
 
       - name: Restore cache release upload URL ♻️
         uses: actions/cache@v2.1.5
