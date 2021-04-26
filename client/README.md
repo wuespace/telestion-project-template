@@ -1,4 +1,4 @@
-# Telestion CLient PSC
+# Telestion Client PSC
 
 It looks like you have not initialized a PSC yet!
 

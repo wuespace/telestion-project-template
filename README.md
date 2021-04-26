@@ -2,7 +2,7 @@
 
 This is a template for Telestion applications.
 It helps you to set up the publishing of Telestion applications.
-Dependencies to the [main repo](https://github.com/wuespace/telestion) are included, too.
+Dependencies to the [main repo](https://github.com/wuespace/telestion-core) are included, too.
 
 ## Necessary Changes
 
@@ -13,7 +13,7 @@ Dependencies to the [main repo](https://github.com/wuespace/telestion) are inclu
   i.e., beginning with the company url in reverse)
 - [ ] `conf/config.json` - adapt to fit your needs
 - [ ] `src/main/java` - add your source code
-- [ ] install the Telestion Client PSC (see `gui/README.md` for further information)
+- [ ] install the Telestion Client PSC (see [`client/README.md`](client/README.md) for further information)
 - [ ] update the README
 
 ## Example Project
