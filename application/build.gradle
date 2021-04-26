@@ -4,14 +4,14 @@ plugins {
     id 'application'
 }
 
-group 'de.wuespace.telestion.project.template'
+group '##GROUP_ID##'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = gradle.sourceCompatibility
 targetCompatibility = gradle.targetCompatibility
 
 application {
-    mainClassName = 'de.wuespace.telestion.Main'
+    mainClassName = '##MAIN_CLASS##'
 }
 
 
