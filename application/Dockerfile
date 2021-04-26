@@ -1,4 +1,4 @@
-FROM openjdk:14-alpine
+FROM openjdk:16.0
 
 ENV WORK_DIR /usr/telestion
 
