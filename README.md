@@ -9,7 +9,7 @@ Dependencies to the [main repo](https://github.com/wuespace/telestion-core) are 
 Please go to the _Actions_ Tab in the GitHub UI and choose the `Initialize` Action.
 Then click `Run workflow` and enter your preferences like so:
 
-![Screenshot_20210426_221738](https://user-images.githubusercontent.com/52416718/116158314-f991d780-a6dd-11eb-9961-0a80ce9b7950.png)
+![Screenshot_20210427_091359](https://user-images.githubusercontent.com/52416718/116217289-01329a00-a739-11eb-811a-08bee30de8b7.png)
 
 > It is recommended to follow [Maven Central `groupId` naming conventions](https://maven.apache.org/guides/mini/guide-naming-conventions.html),
 > e.g. beginning with the company url in reverse.
