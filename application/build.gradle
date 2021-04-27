@@ -11,9 +11,8 @@ sourceCompatibility = gradle.sourceCompatibility
 targetCompatibility = gradle.targetCompatibility
 
 application {
-    mainClassName = '##MAIN_CLASS##'
+    mainClassName = 'de.wuespace.telestion.Telestion'
 }
-
 
 repositories {
     mavenCentral()
