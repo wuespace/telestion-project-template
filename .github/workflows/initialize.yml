@@ -7,9 +7,6 @@ on:
       group:
         description: "Gradle Group Name"
         required: true
-      main:
-        description: "Gradle Main Class"
-        required: true
 
 jobs:
   initialize:
@@ -46,7 +43,7 @@ jobs:
           REPLACE_WITH: ${{ env.repo_name }}
           FILE: "${{ github.workspace }}/application/Dockerfile"
 
-      - name: Update build.gradle group variable
+      - name: Update build.gradle
         run: |
           sed -i "s/${PLACEHOLDER}/${REPLACE_WITH}/g" "$FILE"
         env:
@@ -54,13 +51,14 @@ jobs:
           REPLACE_WITH: ${{ github.event.inputs.group }}
           FILE: "${{ github.workspace }}/application/build.gradle"
 
-      - name: Update build.gradle mainClass variable
+      - name: Generate folder structure
         run: |
-          sed -i "s/${PLACEHOLDER}/${REPLACE_WITH}/g" "$FILE"
+          FOLDERS="$(echo "$GROUP" | sed -e 's/\./\//g')"
+          mkdir -p "${GITHUB_WORKSPACE}/${JAVA_MAIN_SRC}/${FOLDERS}"
+          touch "${GITHUB_WORKSPACE}/${JAVA_MAIN_SRC}/${FOLDERS}/.gitkeep"
         env:
-          PLACEHOLDER: "##MAIN_CLASS##"
-          REPLACE_WITH: ${{ github.event.inputs.main }}
-          FILE: "${{ github.workspace }}/application/build.gradle"
+          GROUP: ${{ github.event.inputs.group }}
+          JAVA_MAIN_SRC: "application/src/main/java"
 
       - name: Initialization finished. Locking action...
         run: |
