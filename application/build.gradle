@@ -11,15 +11,14 @@ sourceCompatibility = gradle.sourceCompatibility
 targetCompatibility = gradle.targetCompatibility
 
 application {
-    mainClassName = 'de.wuespace.telestion.Telestion'
+    mainClassName = 'de.wuespace.telestion.application.Application'
 }
 
 repositories {
     mavenCentral()
     maven {
         name = "GitHubPackages"
-        // TODO: Move to https://maven.pkg.github.com/wuespace/telestion-core/
-        url = uri("https://maven.pkg.github.com/TelestionTeam/telestion/")
+        url = uri("https://maven.pkg.github.com/wuespace/telestion-core/")
         credentials {
             username = System.getenv("GITHUB_ACTOR")
             password = System.getenv("GITHUB_TOKEN")
