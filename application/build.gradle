@@ -30,10 +30,10 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
     implementation "io.vertx:vertx-core:4.0.2"
-    implementation 'io.github.telestionteam:telestion-api:0.0.11'
-    implementation 'io.github.telestionteam:telestion-app:0.0.11'
-    implementation 'io.github.telestionteam:telestion-services:0.0.11'
-    implementation 'io.github.telestionteam:telestion-examples:0.0.11'
+    implementation 'de.wuespace.telestion:telestion-api:0.0.19'
+    implementation 'de.wuespace.telestion:telestion-app:0.0.19'
+    implementation 'de.wuespace.telestion:telestion-services:0.0.19'
+    implementation 'de.wuespace.telestion:telestion-examples:0.0.19'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
