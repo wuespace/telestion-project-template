@@ -84,3 +84,5 @@ jobs:
 
       - name: Test packages 🛃
         run: ./gradlew test
+        env:
+          GITHUB_TOKEN: ${{ secrets.READ_PACKAGES }}
