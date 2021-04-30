@@ -18,14 +18,16 @@ on:
 
 Additionally, if you want to upload release assets in these build workflows, you can use the cached build environment:
 ```yml
-      - name: Restore cache release upload URL ♻️
-        uses: actions/cache@v2.1.5
+      - name: Download build environment 📥
+        uses: dawidd6/action-download-artifact@v2.14.0
         with:
-          path: ~/.build-env
-          key: 'github-release-action'
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          workflow_conclusion: success
+          name: build-env
+          path: ${{ github.workspace }}
 
-      - name: Import environment
-        run: cat ~/.build-env >> $GITHUB_ENV
+      - name: Import environment ⛓
+        run: cat .build-env >> $GITHUB_ENV
 
       - name: Upload release asset
         uses: actions/upload-release-asset@v1.0.1
@@ -37,3 +39,8 @@ Additionally, if you want to upload release assets in these build workflows, you
           asset_name: artifact1.txt
           asset_content_type: text/plain
 ```
+
+## CLA
+
+All contributers are required to sign a contributor's license agreement to contribute to this repository.
+For further details, please contact kontakt@wuespace.de. Thank you! :slightly_smiling_face: 
