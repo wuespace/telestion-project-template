@@ -7,6 +7,7 @@ on:
       group:
         description: "Gradle Group Name"
         required: true
+        default: "de.wuespace.telestion.project.template"
 
 jobs:
   initialize:
@@ -19,6 +20,7 @@ jobs:
       - name: Setup environment
         run: |
           echo "repo_name=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 2 -)" >> $GITHUB_ENV
+          echo "repo_user=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 1 -)" >> $GITHUB_ENV
           echo "lock_file=${GITHUB_WORKSPACE}/.github/initialized" >> $GITHUB_ENV
       
       - name: Check initialization state
@@ -54,11 +56,11 @@ jobs:
       - name: Generate folder structure
         run: |
           FOLDERS="$(echo "$GROUP" | sed -e 's/\./\//g')"
-          mkdir -p "${GITHUB_WORKSPACE}/${JAVA_MAIN_SRC}/${FOLDERS}"
-          touch "${GITHUB_WORKSPACE}/${JAVA_MAIN_SRC}/${FOLDERS}/.gitkeep"
+          mkdir -p "${JAVA_MAIN_SRC}/${FOLDERS}"
+          touch "${JAVA_MAIN_SRC}/${FOLDERS}/.gitkeep"
         env:
           GROUP: ${{ github.event.inputs.group }}
-          JAVA_MAIN_SRC: "application/src/main/java"
+          JAVA_MAIN_SRC: "${{ github.workspace }}/application/src/main/java"
 
       - name: Initialization finished. Locking action...
         run: |
