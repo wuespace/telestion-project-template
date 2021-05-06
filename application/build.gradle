@@ -5,7 +5,6 @@ plugins {
 }
 
 group '##GROUP_ID##'
-version '1.0-SNAPSHOT'
 
 sourceCompatibility = gradle.sourceCompatibility
 targetCompatibility = gradle.targetCompatibility
@@ -37,28 +36,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
-
-task loadEnvironmentVariables {
-    if (file('.github.credentials').exists()) {
-        file('.github.credentials').readLines().each() {
-            if (!it.isEmpty() && !it.startsWith("#")) {
-                def pos = it.indexOf("=")
-                def key = it.substring(0, pos)
-                def value = it.substring(pos + 1)
-
-                if (key.equals("GITHUB_ACTOR")) {
-                    GITHUB_ACTOR = value
-                }
-
-                if (key.equals("GITHUB_TOKEN")) {
-                    GITHUB_TOKEN = value
-                }
-            }
-        }
-    }
-}
-
-assemble.dependsOn(loadEnvironmentVariables)
 
 test {
     useJUnitPlatform()
