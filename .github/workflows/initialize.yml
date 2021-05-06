@@ -37,6 +37,14 @@ jobs:
           REPLACE_WITH: ${{ env.repo_name }}
           FILE: "${{ github.workspace }}/application/settings.gradle"
 
+      - name: Update build.gradle
+        run: |
+          sed -i "s/${PLACEHOLDER}/${REPLACE_WITH}/g" "$FILE"
+        env:
+          PLACEHOLDER: "##GROUP_ID##"
+          REPLACE_WITH: ${{ github.event.inputs.group }}
+          FILE: "${{ github.workspace }}/application/build.gradle"
+
       - name: Update Dockerfile
         run: |
           sed -i "s/${PLACEHOLDER}/${REPLACE_WITH}/g" "$FILE"
@@ -45,13 +53,21 @@ jobs:
           REPLACE_WITH: ${{ env.repo_name }}
           FILE: "${{ github.workspace }}/application/Dockerfile"
 
-      - name: Update build.gradle
+      - name: Update execute shell script
         run: |
           sed -i "s/${PLACEHOLDER}/${REPLACE_WITH}/g" "$FILE"
         env:
-          PLACEHOLDER: "##GROUP_ID##"
-          REPLACE_WITH: ${{ github.event.inputs.group }}
-          FILE: "${{ github.workspace }}/application/build.gradle"
+          PLACEHOLDER: "##REPO_NAME##"
+          REPLACE_WITH: ${{ env.repo_name }}
+          FILE: "${{ github.workspace }}/application/docker/exec.sh"
+
+      - name: Update Vert.x configuration
+        run: |
+          sed -i "s/${PLACEHOLDER}/${REPLACE_WITH}/g" "$FILE"
+        env:
+          PLACEHOLDER: "##REPO_NAME##"
+          REPLACE_WITH: ${{ env.repo_name }}
+          FILE: "${{ github.workspace }}/application/conf/config.json"
 
       - name: Generate folder structure
         run: |
