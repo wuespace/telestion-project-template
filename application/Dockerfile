@@ -1,14 +1,11 @@
 FROM openjdk:16.0
 
-ENV WORK_DIR /usr/telestion
+ENV APP_DIR /usr/telestion/##REPO_NAME##
 
+ADD build/distributions/##REPO_NAME##.tar /usr/telestion
+
+WORKDIR $APP_DIR
 EXPOSE 9870
 
-COPY conf/config.json $WORK_DIR/config.json
-COPY build/distributions/##REPO_NAME##.tar $WORK_DIR/
-COPY docker/exec.sh $WORK_DIR/
-
-WORKDIR $WORK_DIR
 ENTRYPOINT ["sh", "-c"]
-
-CMD ["chmod +x ./exec.sh && ./exec.sh"]
+CMD ["./bin/##REPO_NAME##"]
