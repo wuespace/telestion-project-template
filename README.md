@@ -25,4 +25,4 @@ Let GitHub Actions initialize your project.
 
 ## Example Project
 
-A working example is provided in the [RocketSound repository](https://github.com/wuespace/telestion-rocketsound).
+A good entry point is the [RocketSound Project](https://github.com/wuespace/telestion-project-rocketsound).
