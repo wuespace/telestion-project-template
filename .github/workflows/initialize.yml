@@ -53,6 +53,16 @@ jobs:
           REPLACE_WITH: ${{ env.repo_name }}
           FILE: "${{ github.workspace }}/application/Dockerfile"
 
+      - name: Update docker-compose files
+        run: |
+          sed -i "s/##REPO_NAME##/${REPO_NAME}/g" "${GITHUB_WORKSPACE}/application/docker-compose.yml"
+          sed -i "s/##REPO_USER##/${REPO_USER}/g" "${GITHUB_WORKSPACE}/application/docker-compose.yml"
+          sed -i "s/##REPO_NAME##/${REPO_NAME}/g" "${GITHUB_WORKSPACE}/application/production.yml"
+          sed -i "s/##REPO_USER##/${REPO_USER}/g" "${GITHUB_WORKSPACE}/application/production.yml"
+        env:
+          REPO_NAME: ${{ env.repo_name }}
+          REPO_USER: ${{ env.repo_user }}
+
       - name: Update execute shell script
         run: |
           sed -i "s/${PLACEHOLDER}/${REPLACE_WITH}/g" "$FILE"
@@ -77,6 +87,14 @@ jobs:
         env:
           GROUP: ${{ github.event.inputs.group }}
           JAVA_MAIN_SRC: "${{ github.workspace }}/application/src/main/java"
+
+      - name: Update main README
+        run: |
+          sed -i "s/##REPO_NAME##/${REPO_NAME}/g" "${GITHUB_WORKSPACE}/README.md"
+          sed -i "s/##REPO_USER##/${REPO_USER}/g" "${GITHUB_WORKSPACE}/README.md"
+        env:
+          REPO_NAME: ${{ env.repo_name }}
+          REPO_USER: ${{ env.repo_user }}
 
       - name: Initialization finished. Locking action...
         run: |
