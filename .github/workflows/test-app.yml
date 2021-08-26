@@ -16,21 +16,13 @@ jobs:
         with:
           submodules: true
 
-      - name: Restore gradle cache ♻️
-        uses: actions/cache@v2.1.6
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Set up JDK 16 💿
         uses: actions/setup-java@v2.3.0
         with:
           distribution: 'zulu'
           java-version: '16'
           java-package: jdk
+          cache: 'gradle'
 
       - name: Build packages 🛠️
         run: chmod +x gradlew && ./gradlew build
