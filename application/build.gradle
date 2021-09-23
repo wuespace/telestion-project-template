@@ -28,7 +28,7 @@ repositories {
 dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.5'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.5'
-    implementation "io.vertx:vertx-core:4.1.3"
+    implementation "io.vertx:vertx-core:4.1.4"
 
     implementation 'de.wuespace.telestion:telestion-api:0.5.0'
     implementation 'de.wuespace.telestion:telestion-application:0.5.0'
