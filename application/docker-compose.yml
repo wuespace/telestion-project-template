@@ -7,7 +7,7 @@ services:
     build:
       context: "."
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     ports:
       # passthroughs TCP EventBus Bridge to allow connections from clients on host
       - "127.0.0.1:9870:9870"
@@ -20,10 +20,10 @@ services:
   telestion:
     image: "ghcr.io/##REPO_USER##/##REPO_NAME##:latest"
     profiles: ["prod"]
-    restart: always
+    restart: unless-stopped
     ports:
       # passthroughs TCP EventBus Bridge to allow connections from clients on host
-      - "9870:9870"
+      - "127.0.0.1:9870:9870"
     volumes:
       # pass configuration to container
       - type: bind
@@ -33,4 +33,4 @@ services:
 # rename default docker network
 networks:
   default:
-    name: telestion-project-daedalus2-net
+    name: telestion-net
