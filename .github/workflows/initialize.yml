@@ -52,7 +52,6 @@ jobs:
       - name: Add group id to build.gradle
         run: |
           sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/build.gradle"
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/src/main/java/SimpleVerticle.java"
         env:
           PLACEHOLDER: "##GROUP_ID##"
           REPLACEMENT: ${{ github.event.inputs.group }}
@@ -60,8 +59,12 @@ jobs:
       - name: Generate folder structure
         run: |
           FOLDERS="$(echo "$GROUP" | sed -e 's/\./\//g')"
+          echo "Create folder path ${FOLDERS}..."
           mkdir -p "${JAVA_MAIN_SRC}/${FOLDERS}"
+          echo "Move sample sources..."
           mv "${GITHUB_WORKSPACE}/application/src/main/java/SimpleVerticle.java" "${JAVA_MAIN_SRC}/${FOLDERS}/"
+          echo "Attach package path to Java sources..."
+          sed -i "1s/^/package ${GROUP};\n\n/" "${JAVA_MAIN_SRC}/${FOLDERS}/SimpleVerticle.java"
         env:
           GROUP: ${{ github.event.inputs.group }}
           JAVA_MAIN_SRC: "${{ github.workspace }}/application/src/main/java"
