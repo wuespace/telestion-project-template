@@ -19,69 +19,17 @@ jobs:
 
       - name: Setup environment
         run: |
-          echo "repo_name=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 2 -)" >> $GITHUB_ENV
-          echo "repo_user=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 1 -)" >> $GITHUB_ENV
-          echo "lock_file=${GITHUB_WORKSPACE}/.github/initialized" >> $GITHUB_ENV
+          echo "repo-name=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 2 -)" >> $GITHUB_ENV
+          echo "repo-user=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 1 -)" >> $GITHUB_ENV
       
-      - name: Check initialization state
+      - name: Run initialize script
         run: |
-          test ! -f "$LOCK_FILE"
+          ${GITHUB_WORKSPACE}/scripts/initialize.sh \
+              --gradle-group-name "$group-id" \
+              --repo-user-name "$repo-user" \
+              --repo-name "$repo-name"
         env:
-          LOCK_FILE: ${{ env.lock_file }}
-
-      - name: Replace repo user in configurations
-        run: |
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/docker-compose.yml"
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/production.yml"
-        env:
-          PLACEHOLDER: "##REPO_USER##"
-          REPLACEMENT: ${{ env.repo_name }}
-
-      - name: Replace repo name in configurations
-        run: |
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/.github/workflows/publish-setup.yml"
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/conf/config.json"
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/docker-compose.yml"
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/Dockerfile"
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/production.yml"
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/settings.gradle"
-        env:
-          PLACEHOLDER: "##REPO_NAME##"
-          REPLACEMENT: ${{ env.repo_name }}
-
-      - name: Add group id to build.gradle
-        run: |
-          sed -i "s/${PLACEHOLDER}/${REPLACEMENT}/g" "${GITHUB_WORKSPACE}/application/build.gradle"
-        env:
-          PLACEHOLDER: "##GROUP_ID##"
-          REPLACEMENT: ${{ github.event.inputs.group }}
-
-      - name: Generate folder structure
-        run: |
-          FOLDERS="$(echo "$GROUP" | sed -e 's/\./\//g')"
-          echo "Create folder path ${FOLDERS}..."
-          mkdir -p "${JAVA_MAIN_SRC}/${FOLDERS}"
-          echo "Move sample sources..."
-          mv "${GITHUB_WORKSPACE}/application/src/main/java/SimpleVerticle.java" "${JAVA_MAIN_SRC}/${FOLDERS}/"
-          echo "Attach package path to Java sources..."
-          sed -i "1s/^/package ${GROUP};\n\n/" "${JAVA_MAIN_SRC}/${FOLDERS}/SimpleVerticle.java"
-        env:
-          GROUP: ${{ github.event.inputs.group }}
-          JAVA_MAIN_SRC: "${{ github.workspace }}/application/src/main/java"
-
-      - name: Update main README
-        run: |
-          sed -i "s/##REPO_NAME##/${REPO_NAME}/g" "${GITHUB_WORKSPACE}/README.md"
-          sed -i "s/##REPO_USER##/${REPO_USER}/g" "${GITHUB_WORKSPACE}/README.md"
-        env:
-          REPO_NAME: ${{ env.repo_name }}
-          REPO_USER: ${{ env.repo_user }}
-
-      - name: Initialization finished. Locking action...
-        run: |
-          echo "This project was initialized with Github Actions" > "$LOCK_FILE"
-        env:
-          LOCK_FILE: ${{ env.lock_file }}
+          group-id: ${{ github.event.inputs.group }}
 
       - name: Pushing changes to remote
         run: |
