@@ -88,7 +88,7 @@ get_git_repo_user() {
     error "Git repository doesn\'t contain a remote. Specify repository user manually with \"--repo-user-name <name>\" or set a remote with \"git remote add <name> <url>\"" 2
   fi
 
-  user="$(git remote get-url "$remote" | cut -d":" -f2- | cut -d"/" -f1)"
+  user="$(git remote get-url "$remote" | awk -F "/" '{print $(NF-1)}' | awk -F ":" '{print $NF}')"
   printf '%s\n' "$user"
 }
 
@@ -102,7 +102,7 @@ get_git_repo_name() {
     error "Git repository doesn\'t contain a remote. Specify repository user manually with \"--repo-user-name <name>\" or set a remote with \"git remote add <name> <url>\"" 2
   fi
 
-  name="$(git remote get-url "$remote" | cut -d"/" -f2- | cut -d"." -f1)"
+  name="$(git remote get-url "$remote" | awk -F "/" '{print $NF}' | cut -d"." -f1)"
   printf '%s\n' "$name"
 }
 
