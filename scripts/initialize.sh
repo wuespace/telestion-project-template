@@ -203,8 +203,7 @@ done
 
 # repository name
 PATTERN="##REPO_NAME##"
-FILES="$PROJECT_ROOT/.github/workflows/release.yml
-$PROJECT_ROOT/application/docker-compose.yml
+FILES="$PROJECT_ROOT/application/docker-compose.yml
 $PROJECT_ROOT/application/docker-compose.prod.yml
 $PROJECT_ROOT/application/Dockerfile
 $PROJECT_ROOT/application/settings.gradle

@@ -6,16 +6,17 @@ on:
     branches:
       - "main"
 
-env:
-  repo-name: "##REPO_NAME##"
-
 jobs:
   release-please:
     name: Release Please
     runs-on: ubuntu-latest
     outputs:
       release: ${{ steps.release.outputs }}
+      repo-name: ${{ env.repo-name }}
     steps:
+      - name: Extract repository name
+        run: echo "repo-name=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")" >> $GITHUB_ENV
+
       - name: Run Release Please 🎉
         id: release
         uses: google-github-actions/release-please-action@v3.1.2
@@ -32,6 +33,7 @@ jobs:
     if: ${{ needs.release-please.outputs.release.release_created }}
     env:
       tag: ${{ needs.release-please.outputs.release.tag_name }}
+      repo-name: ${{ needs.release-please.outputs.repo-name }}
     steps:
       - name: Checkout 📥
         uses: actions/checkout@v2.4.0
