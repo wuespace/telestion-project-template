@@ -11,8 +11,12 @@ jobs:
     name: Release Please
     runs-on: ubuntu-latest
     outputs:
-      release: ${{ steps.release.outputs }}
       repo-name: ${{ env.repo-name }}
+      release-created: ${{ steps.release.outputs.release_created }}
+      tag-name: ${{ steps.release.outputs.tag_name }}
+      major: ${{ steps.release.outputs.major }}
+      minor: ${{ steps.release.outputs.minor }}
+      patch: ${{ steps.release.outputs.patch }}
     steps:
       - name: Extract repository name
         run: echo "repo-name=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")" >> $GITHUB_ENV
@@ -30,9 +34,9 @@ jobs:
     name: Publish Setup
     runs-on: ubuntu-latest
     needs: release-please
-    if: ${{ needs.release-please.outputs.release.release_created }}
+    if: ${{ needs.release-please.outputs.release-created }}
     env:
-      tag: ${{ needs.release-please.outputs.release.tag_name }}
+      tag: ${{ needs.release-please.outputs.tag-name }}
       repo-name: ${{ needs.release-please.outputs.repo-name }}
     steps:
       - name: Checkout 📥
@@ -56,11 +60,11 @@ jobs:
     name: Publish Docker Image
     runs-on: ubuntu-latest
     needs: release-please
-    if: ${{ needs.release-please.outputs.release.release_created }}
+    if: ${{ needs.release-please.outputs.release-created }}
     env:
-      major: ${{ needs.release-please.outputs.release.major }}
-      minor: ${{ needs.release-please.outputs.release.minor }}
-      patch: ${{ needs.release-please.outputs.release.patch }}
+      major: ${{ needs.release-please.outputs.major }}
+      minor: ${{ needs.release-please.outputs.minor }}
+      patch: ${{ needs.release-please.outputs.patch }}
     defaults:
       run:
         working-directory: ./application
