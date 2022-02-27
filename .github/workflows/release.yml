@@ -44,9 +44,9 @@ jobs:
 
       - name: Run create-setup script
         run:
-          ${GITHUB_WORKSPACE}/scripts/create-setup.sh --tmp-dir "$tmp-dir" --tag "$tag"
+          ${GITHUB_WORKSPACE}/scripts/create-setup.sh --tmp-dir "${tmp_dir}" --tag "$tag"
         env:
-          tmp-dir: ${{ runner.temp }}
+          tmp_dir: ${{ runner.temp }}
 
       - name: Upload release workspace 🪡
         if: ${{ env.skipped == 'false' }}
