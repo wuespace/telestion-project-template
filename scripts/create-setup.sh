@@ -27,7 +27,7 @@ Options:
 
 Exit codes:
    1 generic error code
-   2 no terminal connected, cannot ask interactively for information
+   2 input/output error, missing arguments or no stdin in interactive mode
    3 project is not initialized
 "
 
@@ -35,128 +35,112 @@ Exit codes:
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -m|--tmp-dir)
-      if [ "$#" -lt 2 ]; then
-        printf 'Path required\n'
-        exit 1
-      fi
-      tmp_dir="$2"
-      shift
+      [ "$#" -lt 2 ] && { printf 'Path required\n'; exit 2; }
+      tmp_dir="$2"; shift
       ;;
     -t|--tag)
-      if [ "$#" -lt 2 ]; then
-        printf 'Tag required\n'
-        exit 1
-      fi
-      tag="$2"
-      shift
+      [ "$#" -lt 2 ] && { printf 'Tag required\n'; exit 2; }
+      tag="$2"; shift
       ;;
     -n|--repo-name)
-      if [ "$#" -lt 2 ]; then
-        printf 'Name required\n'
-        exit 1
-      fi 
-      repo_name="$2"
-      shift
+      [ "$#" -lt 2 ] && { printf 'Name required\n'; exit 2; }
+      repo_name="$2"; shift
       ;;
-    -h|--help)
-      printf '%s\n' "$HELP_TEXT"
-      exit 0
-      ;;
-    --version)
-      printf '%s\n' "$VERSION"
-      exit 0
-      ;;
-    *)
-      printf 'Unknown option: %s\n' "$1"
-      exit 1
-      ;;
+    -h|--help) print_help ;;
+    --version) print_version ;;
+    *) print_unknown_option "$1" ;;
   esac
   shift
 done
 
-if ! [ -f "$LOCK_FILE" ]; then
-  error 'Project is not yet initialized, use the "initialize.sh" script and try again' 3
-fi
-
-# banner+version
-printf "${CL_BLD}%s${CL_RST}\n\n" "$BANNER"
+print_banner
+require_initialized
 
 section 'Configuration'
-# ask user on missing but required arguments
+# acquire missing/not explicity set information
 if [ -z "$tmp_dir" ]; then
   tmp_dir="/tmp/telestion"
 fi
+cd_tmp_dir() {
+  cd "$tmp_dir" || {
+    error "Cannot change into temporary directory: $tmp_dir"
+  }
+}
 step "Temporary directory: $tmp_dir"
 
 if [ -z "$tag" ]; then
-  tag="v$(cat "$PROJECT_ROOT/version.txt")"
+  tag="v$(get_current_version)"
 fi
 step "Tag: $tag"
 
-if [ -z "$repo_name" ]; then
-  repo_name="$(get_git_repo_name)"
+if [ -n "$repo_name" ] || repo_name="$(get_git_repo_name)"; then
+  step "Repository name: $repo_name"
+else
+  # cannot determine information automatically -> ask user
+  require_connected_terminal
+  step "Repository name (e.g. my-telestion-project): " no-lf
+  read -r repo_name
 fi
-step "Repository name: $repo_name"
 
 # startup
-old_cwd="$(pwd)"
-cd "$PROJECT_ROOT" || {
-  error "Cannot change into project root directory: $PROJECT_ROOT" 1
-}
+cd_root_project
 
-# create temporary directory and copy stuff
-FILES="$PROJECT_ROOT/application/docker-compose.prod.yml
-$PROJECT_ROOT/application/conf
-$PROJECT_ROOT/application/data"
-setup_dir="$tmp_dir/$repo_name-$tag"
+section "Prepare directories"
 
-section "Prepare setup directory"
+package_name="$repo_name-$tag"
+package_dir="$tmp_dir/$package_name"
+output_dir="$PROJECT_ROOT/build"
 
-step "Create output directory"
-mkdir -p "$PROJECT_ROOT/build"
-
-if [ -e "$setup_dir" ]; then
-  step "Remove existing temporary directory"
-  rm -r "$setup_dir"
+if [ -e "$package_dir" ]; then
+  step "Remove existing package directory"
+  rm -r "$package_dir"
 fi
 
-step "Create temporary directory: $setup_dir"
-mkdir -p "$setup_dir"
+step "Create temporary directory: $package_dir"
+mkdir -p "$package_dir"
 
-for file in $FILES; do
+step "Create output directory: $output_dir"
+mkdir -p "$output_dir"
+
+section "Copy setup files"
+
+setup_files="$PROJECT_ROOT/application/docker-compose.prod.yml
+$PROJECT_ROOT/application/conf
+$PROJECT_ROOT/application/data"
+
+for file in $setup_files; do
   if [ -e "$file" ]; then
     step "Copy $file"
-    cp -r "$file" "$setup_dir/"
+    cp -r "$file" "$package_dir/"
   else
     step "${CL_YEL}WARNING:${CL_RST} ${CL_BLD}$file does not exist"
   fi
 done
 
-step "Move docker-compose.prod.yml -> docker-compose.yml"
-mv "$setup_dir/docker-compose.prod.yml" "$setup_dir/docker-compose.yml"
+step "Rename production docker-compose configuration"
+mv "$package_dir/docker-compose.prod.yml" "$package_dir/docker-compose.yml"
 
 PATTERN="##TAG##"
 version="$(printf '%s\n' "$tag" | cut -c2-)"
 step "Insert version into docker-compose.yml: $version"
-sed -i "s/$PATTERN/${version}/g" "$setup_dir/docker-compose.yml"
+sed -i "s/$PATTERN/${version}/g" "$package_dir/docker-compose.yml"
 
 section "Finalization"
-cd "$tmp_dir" || {
-  error "Cannot change into temporary directory: $tmp_dir"
-}
-step "Compress setup"
-zip -r "$setup_dir.zip" "$setup_dir"
-cd "$PROJECT_ROOT" || {
-  error "Cannot change into project root directory: $PROJECT_ROOT" 1
-}
 
-if [ -f "$PROJECT_ROOT/build/$repo_name-$tag.zip" ]; then
+step "Compress setup"
+cd_tmp_dir
+zip -r "$package_name.zip" "$package_name/"
+cd_root_project
+
+# move compressed files
+if [ -f "$output_dir/$package_name.zip" ]; then
   step "${CL_YEL}WARNING:${CL_RST} ${CL_BLD}Setup file already exist. Overwriting"
 fi
 step "Move compressed setup"
-mv -f "$setup_dir.zip" "$PROJECT_ROOT/build/"
+mv -f "$package_dir/" "$output_dir"
 
-# appendix
+section "Finished"
+
 APPENDIX="${CL_BLD}The setup has been successfully built. You can find it under:
 
   ${CL_YEL}build/$repo_name-$tag.zip${CL_RST}
@@ -168,9 +152,6 @@ ${CL_BLD}Copy it to your production system and extract it with:
 ${CL_CYA}Telestion${CL_RST}${CL_BLD} wishes you happy monitoring!${CL_RST}
 "
 
-printf '\n%s\n' "$APPENDIX"
-
 # shutdown
-cd "$old_cwd" || {
-  error "Cannot switch back to initial current working directory: $old_cwd, exiting uncleanly" 1
-}
+print_appendix
+cd_start_cwd

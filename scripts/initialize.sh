@@ -27,7 +27,7 @@ Options:
 
 Exit codes:
    1 generic error code
-   2 no terminal connected, cannot ask interactively for information
+   2 input/output error, missing arguments or no stdin in interactive mode
    3 project is already initialized
 "
 
@@ -45,98 +45,77 @@ ${CL_CYA}Telestion${CL_RST}${CL_BLD} wishes you happy hacking!${CL_RST}
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -g|--gradle-group-name)
-      if [ "$#" -lt 2 ]; then
-        printf 'Name required\n'
-        exit 1
-      fi
-
-      gradle_group_name="$2"
-      shift
+      [ "$#" -lt 2 ] && { printf 'Name required\n'; exit 2; }
+      gradle_group_name="$2"; shift
       ;;
     -u|--repo-user-name)
-      if [ "$#" -lt 2 ]; then
-        printf 'Name required\n'
-        exit 1
-      fi
-
-      repo_user_name="$2"
-      shift
+      [ "$#" -lt 2 ] && { printf 'Name required\n'; exit 2; }
+      repo_user_name="$2"; shift
       ;;
     -n|--repo-name)
-      if [ "$#" -lt 2 ]; then
-        printf 'Name required\n'
-        exit 1
-      fi
-
-      repo_name="$2"
-      shift
+      [ "$#" -lt 2 ] && { printf 'Name required\n'; exit 2; }
+      repo_name="$2"; shift
       ;;
-    -h|--help)
-      printf '%s\n' "$HELP_TEXT"
-      exit 0
-      ;;
-    --version)
-      printf '%s\n' "$VERSION"
-      exit 0
-      ;;
-    *)
-      printf 'Unknown option: %s\n' "$1"
-      exit 1
-      ;;
+    -h|--help) print_help ;;
+    --version) print_version ;;
+    *) print_unknown_option "$1" ;;
   esac
   shift
 done
 
-# banner + version
-printf "${CL_BLD}%s${CL_RST}\n\n" "$BANNER"
-
-if [ -f "$LOCK_FILE" ]; then
-  error 'Project is already initialized' 3
-fi
+print_banner
+require_not_initialized
 
 section 'Configuration'
-# ask user on missing but required arguments
-if [ -z "$gradle_group_name" ]; then
-  if ! [ -t 0 ]; then
-    error 'No terminal connected, cannot ask interactively for Gradle Group Name' 2
-  fi
-
+# acquire missing/not explicity set information
+if [ -n "$gradle_group_name" ]; then
+  step "Gradle Group Name: $gradle_group_name"
+else
+  # cannot determine information automatically -> ask user
+  require_connected_terminal
   step 'Gradle Group Name (e.g. de.wuespace.telestion.project.playground): ' no-lf
   read -r gradle_group_name
+fi
+
+if [ -n "$repo_user_name" ] || repo_user_name="$(get_git_repo_user)"; then
+  step "Repository user: $repo_user_name"
 else
-  step "Gradle Group Name: $gradle_group_name"
+  # cannot determine information automatically -> ask user
+  require_connected_terminal
+  step "Repository user (e.g. wuespace): " no-lf
+  read -r repo_user_name
 fi
 
-if [ -z "$repo_user_name" ]; then
-  repo_user_name="$(get_git_repo_user)"
+if [ -n "$repo_name" ] || repo_name="$(get_git_repo_name)"; then
+  step "Repository name: $repo_name"
+else
+  # cannot determine information automatically -> ask user
+  require_connected_terminal
+  step "Repository name (e.g. my-telestion-project): " no-lf
+  read -r repo_name
 fi
-step "Repository user: $repo_user_name"
-
-if [ -z "$repo_name" ]; then
-  repo_name="$(get_git_repo_name)"
-fi
-step "Repository name: $repo_name"
 
 # startup
-old_cwd="$(pwd)"
-cd "$PROJECT_ROOT" || {
-  error "Cannot change into project root directory: $PROJECT_ROOT" 1
-}
+cd_root_project
 
-# repository user
+section "Update README.md"
+
+mv -f "$PROJECT_ROOT/README.project.md" "$PROJECT_ROOT/README.md"
+
+section "Insert repository user: $PATTERN -> $repo_user_name"
+
 PATTERN="##REPO_USER##"
 FILES="$PROJECT_ROOT/application/docker-compose.yml
 $PROJECT_ROOT/application/docker-compose.prod.yml
 $PROJECT_ROOT/README.md"
-
-section "Insert repository user: $PATTERN -> $repo_user_name"
 
 for file in $FILES; do
   step "Update $file"
   sed -i "s/$PATTERN/${repo_user_name}/g" "$file"
 done
 
-# repository name
+section "Insert repository name: $PATTERN -> $repo_name"
+
 PATTERN="##REPO_NAME##"
 FILES="$PROJECT_ROOT/application/docker-compose.yml
 $PROJECT_ROOT/application/docker-compose.prod.yml
@@ -144,30 +123,26 @@ $PROJECT_ROOT/application/Dockerfile
 $PROJECT_ROOT/application/settings.gradle
 $PROJECT_ROOT/README.md"
 
-section "Insert repository name: $PATTERN -> $repo_name"
-
 for file in $FILES; do
   step "Update $file"
   sed -i "s/$PATTERN/${repo_name}/g" "$file"
 done
 
-# gradle group name
+section "Insert Gradle Group Name: $PATTERN -> $gradle_group_name"
+
 PATTERN="##GROUP_ID##"
 FILES="$PROJECT_ROOT/application/build.gradle"
-
-section "Insert Gradle Group Name: $PATTERN -> $gradle_group_name"
 
 for file in $FILES; do
   step "Update $file"
   sed -i "s/$PATTERN/${gradle_group_name}/g" "$file"
 done
 
-# application folder structure
+section "Generate Application source files"
+
 SRC_DIR="$PROJECT_ROOT/application/src/main/java"
 FILES="$SRC_DIR/SimpleVerticle.java"
 main_package_dir="$SRC_DIR/$(echo "$gradle_group_name" | sed -e 's/\./\//g')"
-
-section "Generate Application source files"
 
 step "Create folder path: $main_package_dir"
 mkdir -p "$main_package_dir"
@@ -179,14 +154,9 @@ for file in $FILES; do
   sed -i "1s/^/package ${gradle_group_name};\n\n/" "$main_package_dir/$(basename "$file")"
 done
 
-# locking
 section "Lock project"
-printf 'This project was initialized with Github Actions\n' > "$LOCK_FILE"
-
-# appendix
-printf '\n%s\n' "$APPENDIX"
+set_initialization true
 
 # shutdown
-cd "$old_cwd" || {
-  error "Cannot switch back to initial current working directory: $old_cwd, exiting uncleanly" 1
-}
+print_appendix
+cd_start_cwd
