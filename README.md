@@ -1,12 +1,25 @@
-# Telestion Application Template
+# Telestion Project Template
 
-This is a template for Telestion applications.
-It helps you to set up the publishing of Telestion applications.
-Dependencies to the [main repo](https://github.com/wuespace/telestion-core) are included, too.
+This is a template for Telestion projects.
+It provides the boilerplate code so can instantly start to develop your groundstation.
 
-## Initialization
+## Setup
 
-Please go to the _Actions_ Tab in the GitHub UI and choose the `Initialize` Action.
+For a more in-depth guide on how to start a new project, take a look on our [developer documentation](https://docs.telestion.wuespace.de/application/tutorials/starting-a-new-project/).
+
+### Via GitHub
+
+First, press the `Use this template` button.
+
+// TODO: Insert image
+
+Now, GitHub asks you some required information. Select a suitable user/group and give the repository a meaningful name.
+
+Next, select your repository's visibility. When you're happy with your information, press the Create repository from template button.
+
+// TODO: Insert image
+
+Now, go to the _Actions_ Tab in the GitHub UI and choose the `Initialize` Action.
 Then click `Run workflow` and enter your preferences like so:
 
 ![Screenshot_20210427_091359](https://user-images.githubusercontent.com/52416718/116217289-01329a00-a739-11eb-811a-08bee30de8b7.png)
@@ -16,57 +29,52 @@ Then click `Run workflow` and enter your preferences like so:
 
 Let GitHub Actions initialize your project.
 
-## Additional Changes
+### Manually
 
-- [ ] `conf/config.json` - adapt to fit your needs
-- [ ] `src/main/java` - add your source code
-- [ ] install the Telestion Client PSC (see [`client/README.md`](client/README.md) for further information)
-- [ ] update the README (remove the Initialization and this section)
+1. Create a new and empty git repository:
 
-## Example Project
+   ```shell
+   mkdir my-telestion-project
+   cd my-telestion-project
+   git init
+   ```
 
-Good example projects are:
-- [RocketSound Project](https://github.com/wuespace/telestion-project-rocketsound)
-- [Daedalus2 Project](https://github.com/wuespace/telestion-project-daedalus2)
+2. Fetch the changes from this template:
 
-## Installation
+   ```shell
+   git fetch --depth=1 -n "https://github.com/wuespace/telestion-project-template.git"
+   ```
 
-### The Application
+3. Create an orphaned commit to start from there:
 
-To set up the Telestion Application, please go to the latest release of the project
-and download the `##REPO_NAME##-vX.X.X.zip`:
-https://github.com/##REPO_USER##/##REPO_NAME##/releases/latest
+   ```shell
+   git reset --hard "$(git commit-tree FETCH_HEAD^{tree} -m "feat: Initial commit")"
+   ```
 
-Extract it with your favorite archiver.
+4. Run the initialize script:
 
-Start the application with `docker-compose`.
-Type in your terminal:
+   ```shell
+   ./scripts/initialize.sh
+   ```
 
-```shell
-docker-compose up -d
-```
+5. Commit your changes as suggested by the script:
 
-and `docker-compose` does the rest for you. :wink:
+   ```shell
+   git add .
+   git commit -m "feat: Initialize project"
+   ```
 
-When you want to stop the Application, call:
+6. (Optional) Add a remote repository where you can push your project:
 
-```
-docker-compose down
-```
-
-## Building
-
- To build the projects from source,
- please take a look into the part specific descriptions:
-
- - [Application](./application/README.md)
- - [Client](./client/README.md)
+   ```shell
+   git remote add origin "git@gitlab.com:your-name/your-repository.git
+   ```
 
 ## This repository
 
 The overall file structure of this monorepo looks like this:
 
-```
+```plain
 .
 ├── .github
 │   ├── workflows (CI configuration)
@@ -91,11 +99,11 @@ The overall file structure of this monorepo looks like this:
 
 **The [Application](./application/README.md) and the [Client](./client/README.md) folders contain their own `README.md` that describe the different parts more specific.**
 
- ### Contributing
+### Contributing
 
- For the documentation on contributing to this repository, please take a look at the [Contributing Guidelines](./CONTRIBUTING.md).
+For the documentation on contributing to this repository, please take a look at the [Contributing Guidelines](./CONTRIBUTING.md).
 
- ## Contributors
+## Contributors
 
 Thank you to all contributors of this repository:
 
@@ -105,4 +113,4 @@ Made with [contributors-img](https://contrib.rocks).
 
 ## About
 
-Running [Telestion](https://telestion.wuespace.de/), a project by [WüSpace e.V.](https://www.wuespace.de/).
+Belongs to [Telestion](https://telestion.wuespace.de/), a project by [WüSpace e.V.](https://www.wuespace.de/).
