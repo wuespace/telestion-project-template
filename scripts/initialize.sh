@@ -102,19 +102,17 @@ section "Update README.md"
 
 mv -f "$PROJECT_ROOT/README.project.md" "$PROJECT_ROOT/README.md"
 
-section "Insert repository user: $PATTERN -> $repo_user_name"
-
 PATTERN="##REPO_USER##"
 FILES="$PROJECT_ROOT/application/docker-compose.yml
 $PROJECT_ROOT/application/docker-compose.prod.yml
 $PROJECT_ROOT/README.md"
 
+section "Insert repository user: $PATTERN -> $repo_user_name"
+
 for file in $FILES; do
   step "Update $file"
   sed -i "s/$PATTERN/${repo_user_name}/g" "$file"
 done
-
-section "Insert repository name: $PATTERN -> $repo_name"
 
 PATTERN="##REPO_NAME##"
 FILES="$PROJECT_ROOT/application/docker-compose.yml
@@ -123,15 +121,17 @@ $PROJECT_ROOT/application/Dockerfile
 $PROJECT_ROOT/application/settings.gradle
 $PROJECT_ROOT/README.md"
 
+section "Insert repository name: $PATTERN -> $repo_name"
+
 for file in $FILES; do
   step "Update $file"
   sed -i "s/$PATTERN/${repo_name}/g" "$file"
 done
 
-section "Insert Gradle Group Name: $PATTERN -> $gradle_group_name"
-
 PATTERN="##GROUP_ID##"
 FILES="$PROJECT_ROOT/application/build.gradle"
+
+section "Insert Gradle Group Name: $PATTERN -> $gradle_group_name"
 
 for file in $FILES; do
   step "Update $file"
