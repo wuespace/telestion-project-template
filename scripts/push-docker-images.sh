@@ -9,7 +9,7 @@ SCRIPT_NAME="$(basename "$REAL_PATH")"
 
 . "${SCRIPT_DIR}/env.sh"
 
-BANNER="Telestion Project Docker Push Service (POSIX $VERSION
+BANNER="Telestion Project Docker Push Service (POSIX) $VERSION
 (c) WüSpace e. V."
 
 HELP_TEXT="$BANNER
@@ -128,29 +128,29 @@ if ! $SUDO docker build . --tag "$latest_tag" --tag "$major_tag" --tag "$minor_t
   error "Cannot build docker image" 1
 fi
 
-section "Docker publish"
+section "Docker push"
 
-step "Publish latest tag"
+step "Push latest tag"
 
-if ! $SUDO docker publish "$latest_tag"; then
+if ! $SUDO docker push "$latest_tag"; then
   error "Cannot publish latest tag to registry" 1
 fi
 
-step "Publish major tag"
+step "Push major tag"
 
-if ! $SUDO docker publish "$major_tag"; then
+if ! $SUDO docker push "$major_tag"; then
   error "Cannot publish latest tag to registry" 1
 fi
 
-step "Publish minor tag"
+step "Push minor tag"
 
-if ! $SUDO docker publish "$minor_tag"; then
+if ! $SUDO docker push "$minor_tag"; then
   error "Cannot publish latest tag to registry" 1
 fi
 
-step "Publish patch tag"
+step "Push patch tag"
 
-if ! $SUDO docker publish "$patch_tag"; then
+if ! $SUDO docker push "$patch_tag"; then
   error "Cannot publish latest tag to registry" 1
 fi
 
