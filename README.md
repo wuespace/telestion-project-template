@@ -11,13 +11,13 @@ For a more in-depth guide on how to start a new project, take a look on our [dev
 
 First, press the `Use this template` button.
 
-// TODO: Insert image
+![github-use-this-template](https://user-images.githubusercontent.com/52416718/155911275-4b230feb-4fde-4ba3-a302-d552f0e7b9b3.png)
 
 Now, GitHub asks you some required information. Select a suitable user/group and give the repository a meaningful name.
 
 Next, select your repository's visibility. When you're happy with your information, press the Create repository from template button.
 
-// TODO: Insert image
+![github-create-repo](https://user-images.githubusercontent.com/52416718/155911289-92e4cebe-65db-48b5-be31-0b09a098265d.png)
 
 Now, go to the _Actions_ Tab in the GitHub UI and choose the `Initialize` Action.
 Then click `Run workflow` and enter your preferences like so:
