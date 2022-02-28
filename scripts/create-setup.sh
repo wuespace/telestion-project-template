@@ -137,7 +137,7 @@ if [ -f "$output_dir/$package_name.zip" ]; then
   step "${CL_YEL}WARNING:${CL_RST} ${CL_BLD}Setup file already exist. Overwriting"
 fi
 step "Move compressed setup"
-mv -f "$package_dir/" "$output_dir"
+mv -f "$tmp_dir/$package_name.zip" "$output_dir/"
 
 section "Finished"
 
