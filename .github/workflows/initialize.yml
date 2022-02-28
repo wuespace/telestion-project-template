@@ -19,17 +19,17 @@ jobs:
 
       - name: Setup environment
         run: |
-          echo "repo-name=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 2 -)" >> $GITHUB_ENV
-          echo "repo-user=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 1 -)" >> $GITHUB_ENV
-      
+          echo "repo_name=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 2 -)" >> $GITHUB_ENV
+          echo "repo_user=$(echo "$GITHUB_REPOSITORY" | cut -d "/" -f 1 -)" >> $GITHUB_ENV
+
       - name: Run initialize script
         run: |
           ${GITHUB_WORKSPACE}/scripts/initialize.sh \
-              --gradle-group-name "$group-id" \
-              --repo-user-name "$repo-user" \
-              --repo-name "$repo-name"
+              --gradle-group-name "$group_id" \
+              --repo-user-name "$repo_user" \
+              --repo-name "$repo_name"
         env:
-          group-id: ${{ github.event.inputs.group }}
+          group_id: ${{ github.event.inputs.group }}
 
       - name: Pushing changes to remote
         run: |
