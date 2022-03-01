@@ -56,6 +56,34 @@ The `release` action creates and updates a pull request that tracks the changes 
 
 If you're not hosting your code on GitHub, we provide some convenience scripts to release a new version.
 
+First, bump your project version.
+
+Update the project version in the version.txt file which resides in the project root.
+
+Next, open the console and commit the version bump:
+
+```shell
+git add version.txt
+git commit -m "chore(main): release $(<version.txt)"
+git tag -a "v$(<version.txt)" -m "release $(<version.txt)"
+git push --follow-tags
+```
+
+> Attention: The deployment scripts and tools require that you use the Semantic Versioning release style in your project.
+
+Now, build the Application.
+
+Open your IDE and select the assembleDist task in the distribution section of Gradle.
+Or run the Gradle task in your console:
+
+```shell
+cd application
+JAVA_HOME="<path-to-jdk16>" ./gradlew assembleDist
+cd ..
+```cd application
+JAVA_HOME="<path-to-jdk16>" ./gradlew assembleDist
+cd ..
+
 To build, tag and publish the docker containers, call the following script:
 
 ```shell
@@ -68,7 +96,7 @@ To create a setup archive, call the following script:
 ./scripts/create-setup.sh
 ```
 
-Both scripts depends on the version number in the `version.txt` file.
+Both scripts depend on the version number in the `version.txt` file.
 
 ## This repository
 

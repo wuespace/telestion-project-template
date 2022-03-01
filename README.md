@@ -67,7 +67,9 @@ Let GitHub Actions initialize your project.
 6. (Optional) Add a remote repository where you can push your project:
 
    ```shell
-   git remote add origin "git@gitlab.com:your-name/your-repository.git
+   git remote add origin "git@gitlab.com:your-name/my-telestion-project.git"
+   git branch -M main
+   git push -u origin main
    ```
 
 ## This repository
