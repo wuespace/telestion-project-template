@@ -1,0 +1,57 @@
+# Changelog
+
+## 1.0.0 (2023-02-01)
+
+
+### Features
+
+* Add CLA section to contributing guidelines ([8c464de](https://github.com/wuespace/telestion-project-template/commit/8c464de6d46b29b7a809772076cb329750c9071b))
+* Add code of conduct ([f50da26](https://github.com/wuespace/telestion-project-template/commit/f50da2630e403eefae36882f4859ea874eeb44f1))
+* Add create setup script ([0aea2b8](https://github.com/wuespace/telestion-project-template/commit/0aea2b800f7d469d426fe453b80ebb8e85b7c278))
+* Add definitions folder ([df25352](https://github.com/wuespace/telestion-project-template/commit/df25352286916c9d880e926073ac971e5566eee4))
+* Add initialize script ([ccf9ed1](https://github.com/wuespace/telestion-project-template/commit/ccf9ed1683190835d6d32d4aea90141444e366c5))
+* Add intended releace cycle to Contributing Guidelines ([9b8a567](https://github.com/wuespace/telestion-project-template/commit/9b8a5675504845a81ff9138bf44a986b2b9b931f))
+* Add picture to README.md ([c7cc499](https://github.com/wuespace/telestion-project-template/commit/c7cc4991477d6c1f46cfc93faee2d8a0e5f249a7))
+* Add review suggestions ([b557f42](https://github.com/wuespace/telestion-project-template/commit/b557f42f81d50a1f13cee5bd0a1aab333ee1bc77))
+* Add semi-automated initialization via GitHub Actions ([e45a77d](https://github.com/wuespace/telestion-project-template/commit/e45a77d9a432b6099a3d62e2dd7d1c8a41f2eb42))
+* **app:** GitHub credentials file ([e942ae8](https://github.com/wuespace/telestion-project-template/commit/e942ae894e1b77bcf4e9fa719fb74a8543433aef))
+* **application:** Add `WithTiming` trait to `SimpleVerticle` ([fbf9533](https://github.com/wuespace/telestion-project-template/commit/fbf953391f99e2fd80b7d2b0aa77eaeeb15ba200))
+* **application:** Apply working changes from telestion-project-daedalus2 ([d3a606c](https://github.com/wuespace/telestion-project-template/commit/d3a606c18a76e77f47d914238fd7cbcd1a3d4c4c))
+* **application:** Move `production.yml` to `docker-compose.prod.yml` ([cdc4ef4](https://github.com/wuespace/telestion-project-template/commit/cdc4ef42a11fb71bf58744de17548ad74bfe5cdd))
+* **ci:** Fix `release` workflow not uploading setup artifact ([3fc47b3](https://github.com/wuespace/telestion-project-template/commit/3fc47b3c51f896c517de09f1b5d7d4dbca1fc26d))
+* **ci:** Fix and update steps in initialize action and update app configurations from other projects ([13421ea](https://github.com/wuespace/telestion-project-template/commit/13421eaba1a1d0ab5f8bdcdb7ebdc39048903aa9)), closes [#59](https://github.com/wuespace/telestion-project-template/issues/59)
+* **ci:** Fix initialize workflow ([7ecb53c](https://github.com/wuespace/telestion-project-template/commit/7ecb53cd52f394635547ea2a30ae9656576306da))
+* **ci:** Update initialize action to use new initialize script ([6e46fdc](https://github.com/wuespace/telestion-project-template/commit/6e46fdce576ee4b5cef90faa6439420fd3d6e281))
+* **ci:** Update release action to use release-please add new create setup script ([faeba90](https://github.com/wuespace/telestion-project-template/commit/faeba909cdbac097c027995b197f431e45decd34))
+* Fetch Telestion Core packages from Maven Central and update sample code to match current implementation ([ee1670b](https://github.com/wuespace/telestion-project-template/commit/ee1670b44dbbb47cd8954fe393df939c73c8b676))
+* Generate folder structure based on group name ([3f223b1](https://github.com/wuespace/telestion-project-template/commit/3f223b18db93fde76b0206e7fd7ca12cc7f9ed0f))
+* Introduce docker compose into build and deploy pipeline ([708649d](https://github.com/wuespace/telestion-project-template/commit/708649d1fbfbf67e5f86cfa1f5ba673907789d94)), closes [#33](https://github.com/wuespace/telestion-project-template/issues/33)
+* Merge setup from https://github.com/fussel178/telestion-rocketsound/tree/feat/merge-with-psc and updated Github Actions workflows ([300270b](https://github.com/wuespace/telestion-project-template/commit/300270bb71346217bd82a7d5f6f450ef375487c7))
+* **scripts:** Add push docker images script ([29de199](https://github.com/wuespace/telestion-project-template/commit/29de1994ad2c672f1582f2ed408f543b79308062))
+* **scripts:** Fix move error in create setup script ([338b0ce](https://github.com/wuespace/telestion-project-template/commit/338b0cec7940c0727414ba80b657e27c48c95355))
+* **scripts:** Make push docker image script executable ([8e7b5c2](https://github.com/wuespace/telestion-project-template/commit/8e7b5c233042491132882415bed71716bdaf6a55))
+* **scripts:** Update initialize and create setup scripts ([ba5564b](https://github.com/wuespace/telestion-project-template/commit/ba5564b621d70363e395c729fe45ca7b02790b76))
+* Separate conventional release and build steps ([e30dff3](https://github.com/wuespace/telestion-project-template/commit/e30dff30c5e560a094baef346879cf56910285e0))
+* Separate project and template README ([c2906ca](https://github.com/wuespace/telestion-project-template/commit/c2906ca8466c8930b1b6a335f3da7301ad7f31e4))
+* Switch to Java 16 ([056c69d](https://github.com/wuespace/telestion-project-template/commit/056c69d43ea75c688ee40cec60496c298d020b65))
+* Update application main class name to match telestion-core ([9224190](https://github.com/wuespace/telestion-project-template/commit/922419038159664a097091d2fdf4c95bab37c5e2))
+* Update Docker image to openjdk:16.0 ([8fe46be](https://github.com/wuespace/telestion-project-template/commit/8fe46be4017c6263baf0d86a2bcc7a22db380137))
+* Update initialization workflow ([01518eb](https://github.com/wuespace/telestion-project-template/commit/01518ebf66357fdf7360633cea7a776efc03f8bb))
+* Update READMEs ([f51bc36](https://github.com/wuespace/telestion-project-template/commit/f51bc36a39505fe459dbb1b8aa97ab6a9de927fd))
+* Update workflows ([4c6ceca](https://github.com/wuespace/telestion-project-template/commit/4c6ceca2dd3e6db3d2505234519541cb35faf4c8))
+
+
+### Bug Fixes
+
+* Add project.json for versioning ([050726a](https://github.com/wuespace/telestion-project-template/commit/050726a85f869eeffbfedfc973ba8bb60ec3aebb))
+* Add token to CI workflow ([3ffd575](https://github.com/wuespace/telestion-project-template/commit/3ffd5753d63535cf76db0b5f58b34ada1d2b0f4b))
+* CI workflow ([54873f8](https://github.com/wuespace/telestion-project-template/commit/54873f830e7affadadb7c490bc53aeb965450655))
+* Clean up unused docker scripts ([4985978](https://github.com/wuespace/telestion-project-template/commit/49859788f5becacadea93ddb36788dd5e5358adc))
+* Default working directory in workflows ([c04a153](https://github.com/wuespace/telestion-project-template/commit/c04a1537faac5883b94a49187e7af3d005efcb09))
+* Fix docker publshing issues ([b618ff3](https://github.com/wuespace/telestion-project-template/commit/b618ff3896d2063c85f01a519856c6e1cd8a6a17))
+* Gradle main class and maven download url ([6850393](https://github.com/wuespace/telestion-project-template/commit/685039398149b63c0e79260e25722e554005bccb))
+* Move back to persistent main class name ([60c2458](https://github.com/wuespace/telestion-project-template/commit/60c2458e5b0f67e77e2dd9e84359cc41d3b35536))
+* Remove package path from Java sample entirely and generate it on initialization ([9440216](https://github.com/wuespace/telestion-project-template/commit/944021670ab0897837bd04f304538ce0cc2538ac))
+* **scripts:** Fix docker push script wrong docker command ([19f48db](https://github.com/wuespace/telestion-project-template/commit/19f48db26e15ec2374629d2e1d14feb008d9d2f5))
+* **scripts:** Fix wrong log output in initialize script ([a15ce1b](https://github.com/wuespace/telestion-project-template/commit/a15ce1b9e476c0fd01a635fcc62cc0ec13c95d58))
+* update dependencies to new wuespace organisation ([bf76fe3](https://github.com/wuespace/telestion-project-template/commit/bf76fe315b8f5c0a1e5e690b52dee9a512cb94cc))
